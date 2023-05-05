@@ -11,9 +11,9 @@ const mobNo = document.getElementById("mobN");
 const fNmae = document.getElementById("fNme");
 const conEmail = document.getElementById("conEmail");
 const email = document.getElementById("eMail");
-let addFav = document.getElementById("addTofav");
-let ordFav = document.getElementById("ordTofav");
-let favOk = document.getElementById("okFav");
+const addFav = document.getElementById("addTofav");
+const ordFav = document.getElementById("ordTofav");
+const favOk = document.getElementById("okFav");
 const placeOrderbtn = document.getElementById("p-order");
 const loyalBtn = document.getElementById("c-loyalty");
 const btninc1 = document.getElementById("increment1");
@@ -178,31 +178,39 @@ function duraTIOn() {
 
 Addbutton.addEventListener("click",btnadd);
 function btnadd(){
+    let FuNmae = fNmae.value;
     let SlaVa = parseInt(SlAdult.value);
     let SlcVa = parseInt(SlChild.value);
     let FoaV = parseInt(FoAdult.value);
     let FocV = parseInt(FoChild.value);
     let inF = parseInt(inFant.value);
-    let totalP = parseInt(SlAdult+SlChild+FoAdult+FoChild+inFant);
+    let totalP = parseInt(SlaVa+SlcVa+FoaV+FocV+inF);
+    let EmAil = email.value;
     let mob = mobNo.value;
     let tOtAl = txtCost.innerText;
+    let ArrDte = date.value;
     overAllCost += (currentCost + duRationCost);
     totalSLA += SlaVa;
     totalSLC += SlcVa;
     totalFOA += FoaV;
     totalFOC += FocV;
     totalINF += inF;
-    name += fNmae;
+    totalex += totalP
+    
 
     ovrAllOrder.innerHTML = `
     <div id="orderDes">
     <p>
+    Booking Name: ${FuNmae}<br>
+    No of People: ${totalex}<br>
     SL Adult: ${totalSLA}<br>
     SL Child: ${totalSLC}<br>
     FO Adult: ${totalFOA}<br>
     FO Child: ${totalFOC}<br>
     Infants: ${totalINF}<br>
     Total: ${tOtAl}<br>
+    Arrival Date: ${ArrDte}<br>
+    Email: ${EmAil}<br>
     Mobile No: ${mob}<br>
     </p>
     </div>
@@ -223,10 +231,58 @@ function resetB(){
     duRationCost=0;
     fulCost=0;
 }
+addFav.addEventListener("click", favBtn);
+function favBtn(){
+    delt();
+    let SLa = SlAdult.getAttribute("value");
+    let Slc = SlChild.getAttribute("value");
+    let Fa = FoAdult.getAttribute("value");
+    let Fc = FoChild.getAttribute("value");
+    let In = inFant.getAttribute("value");
+
+    localStorage.setItem("SL Adult", SLa)
+    localStorage.setItem("SL Child", Slc)
+    localStorage.setItem("Foreign Adult", Fa)
+    localStorage.setItem("Foreign Child", Fc)
+    localStorage.setItem("Infant", In)
+}
+function delt(){
+    localStorage.clear
+}
+
+ordFav.addEventListener("click", FavoRd);
+function FavoRd(){
+    let SLa = localStorage.getItem("SL Adult");
+    let Slc = localStorage.getItem("SL Child");
+    let Fa = localStorage.getItem("Foreign Adult");
+    let Fc = localStorage.getItem("Foreign Child");
+    let In = localStorage.getItem("Infant");
+    let AsL = parseInt(SLa);
+    let CsL = parseInt(Slc);
+    let Af = parseInt(Fa);
+    let Cf = parseInt(Fc);
+    let Ni = parseInt(In);
+
+    currentCost = (AsL*1200)+(CsL*700)+(Af*5500)+(Cf*2700)+(Ni*0);
+
+    SlAdult.setAttribute("value", SLa);
+    SlChild.setAttribute("value", Slc);
+    FoAdult.setAttribute("value", Fa);
+    FoChild.setAttribute("value", Fc);
+    inFant.setAttribute("value", In);
+    txtCost.innerText = `LKR.  ${currentCost}`
+}
+
+
 
 placeOrderbtn.addEventListener("click",pOrderbtn);
 function pOrderbtn(){
     alert("Thank You For Purchasing!");
+    fNmae.value="";
+    date.value="";
+    mobNo.value="";
+    email.value="";
+    conEmail.value="";
     SlAdult.value=0;
     SlChild.value=0;
     FoAdult.value=0;
@@ -241,13 +297,15 @@ function pOrderbtn(){
     txtCost.innerText="0.00";
 }
 
-loyalBtn.addEventListener("click",loyalT);
-function loyalT(){
-    if(totalex >3 ){
-        let loyaltyP = totalex*15
-        loyaltytxt.innerText=`Loyalty Earned: ${loyaltyP} Points`
-    }else loyaltytxt.innerText=`Loyalty Earned: 0 Points`
+loyalBtn.addEventListener("click", LoylBtn);
+function LoylBtn(){
+    if(totalex > 3){
+        let loyalpoints = totalex*15
+        loyaltytxt.innerText = `Loyalty Earned: ${loyalpoints} points`
+    }else loyaltytxt.innerText = `Loyalty Earned: 0 points`
 }
+
+
 
 
 
